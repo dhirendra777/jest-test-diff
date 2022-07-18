@@ -49,7 +49,7 @@ try {
     "git",
     [
       "show",
-      "origin/${github.context.payload.pull_request.base.ref}:./package.json",
+      `origin/${github.context.payload.pull_request.base.ref}:./package.json`,
     ],
     baseOptions
   );
@@ -58,7 +58,7 @@ try {
     "git",
     [
       "show",
-      "origin/${github.context.payload.pull_request.head.ref}:./package.json",
+      `origin/${github.context.payload.pull_request.head.ref}:./package.json`,
     ],
     headOptions
   );
