@@ -13533,14 +13533,20 @@ try {
     [headOutput, headError, headOptions] = getOptions();
 
   const basePromise = exec.exec(
-    `git show origin/${github.context.payload.pull_request.base.ref}:./package.json`,
-    [],
+    "git",
+    [
+      "show",
+      "origin/${github.context.payload.pull_request.base.ref}:./package.json",
+    ],
     baseOptions
   );
 
   const headPromise = exec.exec(
-    `git show origin/${github.context.payload.pull_request.head.ref}:./package.json`,
-    [],
+    "git",
+    [
+      "show",
+      "origin/${github.context.payload.pull_request.head.ref}:./package.json",
+    ],
     headOptions
   );
 
