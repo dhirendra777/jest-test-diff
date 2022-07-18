@@ -14,7 +14,9 @@ try {
   //   console.log(`The event payload: ${payload}`);
 
   exec
-    .exec(`git show origin/${github.context.payload.pull_request.base.ref}`)
+    .exec(
+      `git show origin/${github.context.payload.pull_request.base.ref}:./package.json`
+    )
     .then((response) => {
       const content = response;
       const path = core.getInput("path");
@@ -24,7 +26,7 @@ try {
       //     content = content.trim();
       //   }
 
-      core.setOutput("content", content, JSON.parse(content));
+      core.setOutput("content", content, JSON.parse(response));
     });
 } catch (error) {
   core.setFailed(error.message);

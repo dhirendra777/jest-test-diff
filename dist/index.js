@@ -13493,7 +13493,9 @@ try {
   //   console.log(`The event payload: ${payload}`);
 
   exec
-    .exec(`git show origin/${github.context.payload.pull_request.base.ref}`)
+    .exec(
+      `git show origin/${github.context.payload.pull_request.base.ref}:./package.json`
+    )
     .then((response) => {
       const content = response;
       const path = core.getInput("path");
