@@ -13546,10 +13546,10 @@ try {
 
   Promise.all([basePromise, headPromise]).then(() => {
     if (baseError || headError) return 1;
-    console.log("Base content", baseContent);
-    console.log("Head content", headContent);
-    const baseContent = JSON.parse(baseOutput),
-      headContent = JSON.parse(headOutput);
+    console.log("Base content", baseOutput);
+    console.log("Head content", headOutput);
+    // const baseContent = JSON.parse(baseOutput),
+    //   headContent = JSON.parse(headOutput);
   });
 } catch (error) {
   core.setFailed(error.message);
