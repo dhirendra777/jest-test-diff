@@ -13300,6 +13300,14 @@ module.exports = require("path");
 
 /***/ }),
 
+/***/ 7282:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("process");
+
+/***/ }),
+
 /***/ 5477:
 /***/ ((module) => {
 
@@ -13481,8 +13489,25 @@ const core = __nccwpck_require__(2438);
 const github = __nccwpck_require__(7960);
 const { promises: fs } = __nccwpck_require__(7147);
 const exec = __nccwpck_require__(1313);
+const { stderr } = __nccwpck_require__(7282);
 
 try {
+  function getOptions() {
+    let headOutput = "";
+    let headError = "";
+
+    const headOptions = {};
+    headOptions.listeners = {
+      stdout: (data) => {
+        headOutput += data.toString();
+      },
+      stderr: (data) => {
+        headError += data.toString();
+      },
+    };
+
+    return [headOutput, headError, headOptions];
+  }
   // `who-to-greet` input defined in action metadata file
   //   const nameToGreet = core.getInput('who-to-greet');
   //   console.log(`Hello ${nameToGreet}!`);
@@ -13492,17 +13517,37 @@ try {
   //   const payload = JSON.stringify(github.context.payload, undefined, 2)
   //   console.log(`The event payload: ${payload}`);
 
+  //   let headOutput = "";
+  //   let headError = "";
+
+  //   const headOptions = {};
+  //   headOptions.listeners = {
+  //     stdout: (data) => {
+  //       headOutput += data.toString();
+  //     },
+  //     stderr: (data) => {
+  //       headError += data.toString();
+  //     },
+  //   };
+  const [baseOutput, baseError, baseOptions] = getOptions(),
+    [headOutput, headError, headOptions] = getOptions();
+
   const basePromise = exec.exec(
-    `git show origin/${github.context.payload.pull_request.base.ref}:./package.json`
+    `git show origin/${github.context.payload.pull_request.base.ref}:./package.json`,
+    [],
+    baseOptions
   );
 
   const headPromise = exec.exec(
-    `git show origin/${github.context.payload.pull_request.head.ref}:./package.json`
+    `git show origin/${github.context.payload.pull_request.head.ref}:./package.json`,
+    [],
+    headOptions
   );
 
-  Promise.all([basePromise, headPromise]).then((values) => {
-    const baseContent = JSON.parse(values[0]),
-      headContent = JSON.parse(values[1]);
+  Promise.all([basePromise, headPromise]).then(() => {
+    if (baseError || headError) return 1;
+    const baseContent = JSON.parse(baseOutput),
+      headContent = JSON.parse(headOutput);
     core.setOutput("Base content", baseContent.dependencies);
     core.setOutput("Head content", headContent.dependencies);
   });
