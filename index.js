@@ -14,7 +14,7 @@ try {
   //   console.log(`The event payload: ${payload}`);
 
   const content = exec.exec(
-    `git show origin/${github.event.pull_request.base.ref}`
+    `git show origin/${github.context.payload.pull_request.base.ref}`
   );
   const path = core.getInput("path");
   const trim = core.getBooleanInput("trim");
