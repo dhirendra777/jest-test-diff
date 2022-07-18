@@ -59,10 +59,10 @@ try {
 
   Promise.all([basePromise, headPromise]).then(() => {
     if (baseError || headError) return 1;
+    console.log("Base content", baseContent);
+    console.log("Head content", headContent);
     const baseContent = JSON.parse(baseOutput),
       headContent = JSON.parse(headOutput);
-    core.setOutput("Base content", baseContent.dependencies);
-    core.setOutput("Head content", headContent.dependencies);
   });
 } catch (error) {
   core.setFailed(error.message);
