@@ -13505,7 +13505,7 @@ try {
       //     content = content.trim();
       //   }
 
-      core.setOutput("content", content, JSON.parse(content));
+      core.setOutput("content", content, JSON.parse(response));
     });
 } catch (error) {
   core.setFailed(error.message);
