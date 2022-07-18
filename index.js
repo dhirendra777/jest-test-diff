@@ -13,17 +13,19 @@ try {
   //   const payload = JSON.stringify(github.context.payload, undefined, 2)
   //   console.log(`The event payload: ${payload}`);
 
-  const content = exec.exec(
-    `git show origin/${github.context.payload.pull_request.base.ref}`
-  );
-  const path = core.getInput("path");
-  const trim = core.getBooleanInput("trim");
-  //   let content = await fs.readFile(path, "utf8");
-  //   if (trim) {
-  //     content = content.trim();
-  //   }
+  exec
+    .exec(`git show origin/${github.context.payload.pull_request.base.ref}`)
+    .then((response) => {
+      const content = response;
+      const path = core.getInput("path");
+      const trim = core.getBooleanInput("trim");
+      //   let content = await fs.readFile(path, "utf8");
+      //   if (trim) {
+      //     content = content.trim();
+      //   }
 
-  core.setOutput("content", content, JSON.parse(content));
+      core.setOutput("content", content, JSON.parse(content));
+    });
 } catch (error) {
   core.setFailed(error.message);
 }
