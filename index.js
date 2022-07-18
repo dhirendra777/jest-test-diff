@@ -21,7 +21,7 @@ try {
     `git show origin/${github.context.payload.pull_request.head.ref}:./package.json`
   );
 
-  Promise.all(basePromise, headPromise).then((values) => {
+  Promise.all([basePromise, headPromise]).then((values) => {
     const baseContent = JSON.parse(values[0]),
       headContent = JSON.parse(values[1]);
     core.setOutput("Base content", baseContent.dependencies);
