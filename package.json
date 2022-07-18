@@ -1,0 +1,24 @@
+{
+  "name": "jest-test-diff",
+  "version": "1.0.0",
+  "description": "Github action to check whether package.json have dependency changes in base and source branch.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhirendra777/jest-test-diff.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dhirendra777/jest-test-diff/issues"
+  },
+  "homepage": "https://github.com/dhirendra777/jest-test-diff#readme",
+  "dependencies": {
+    "@actions/core": "^1.9.0",
+    "@actions/github": "^5.0.3"
+  }
+}
