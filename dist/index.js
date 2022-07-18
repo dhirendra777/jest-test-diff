@@ -13492,21 +13492,20 @@ try {
   //   const payload = JSON.stringify(github.context.payload, undefined, 2)
   //   console.log(`The event payload: ${payload}`);
 
-  exec
-    .exec(
-      `git show origin/${github.context.payload.pull_request.base.ref}:./package.json`
-    )
-    .then((response) => {
-      const content = response;
-      const path = core.getInput("path");
-      const trim = core.getBooleanInput("trim");
-      //   let content = await fs.readFile(path, "utf8");
-      //   if (trim) {
-      //     content = content.trim();
-      //   }
+  const basePromise = exec.exec(
+    `git show origin/${github.context.payload.pull_request.base.ref}:./package.json`
+  );
 
-      core.setOutput("content", content, JSON.parse(response));
-    });
+  const headPromise = exec.exec(
+    `git show origin/${github.context.payload.pull_request.head.ref}:./package.json`
+  );
+
+  Promise.all(basePromise, headPromise).then((values) => {
+    const baseContent = JSON.parse(values[0]),
+      headContent = JSON.parse(values[1]);
+    core.setOutput("Base content", baseContent.dependencies);
+    core.setOutput("Head content", headContent.dependencies);
+  });
 } catch (error) {
   core.setFailed(error.message);
 }
