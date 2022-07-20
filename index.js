@@ -20,7 +20,7 @@ const main = async () => {
   let baseContent = await fs.readFile("./base.json");
   let headContent = await fs.readFile("./head.json");
 
-  console.log("Base content is ", baseContent);
+  console.log("Base content is ", baseContent.dependencies);
   console.log("Head content is ", headContent);
 };
 
