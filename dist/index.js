@@ -13491,18 +13491,14 @@ const main = async () => {
   await exec.exec(
     `git show origin/${github.context.payload.pull_request.base.ref} -- ./package.json >> base.json`
   );
-  /* Dump in file */
-  await exec.exec(
-    `git show origin/${github.context.payload.pull_request.base.ref} -- ./package.json >> base.json`
-  );
 
   await exec.exec(
     `git show origin/${github.context.payload.pull_request.head.ref} -- ./package.json >> head.json`
   );
 
   /* Read file in memory and compare package.json */
-  let baseContent = await fs.readFile("base.json", "utf8");
-  let headContent = await fs.readFile("head.json", "utf8");
+  let baseContent = await fs.readFile("./base.json");
+  let headContent = await fs.readFile("./head.json");
 
   console.log("Base content is ", baseContent);
   console.log("Head content is ", headContent);
