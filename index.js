@@ -16,8 +16,8 @@ const main = async () => {
   );
 
   /* Read file in memory and compare package.json */
-  let baseContent = await fs.readFile("~/base.json", "utf8");
-  let headContent = await fs.readFile("~/head.json", "utf8");
+  let baseContent = await fs.readFile("base.json", "utf8");
+  let headContent = await fs.readFile("head.json", "utf8");
 
   console.log("Base content is ", baseContent);
   console.log("Head content is ", headContent);
