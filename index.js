@@ -23,7 +23,7 @@ const main = async () => {
   console.log("Head content is ", headContent);
 };
 
-main().catch(() => {
+main().catch((error) => {
   /* Remove created file */
   core.setFailed(error.message);
 });
