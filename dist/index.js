@@ -13488,11 +13488,11 @@ const exec = __nccwpck_require__(1313);
 const main = async () => {
   /* Dump in file */
   await exec.exec(
-    `git show origin/${github.context.payload.pull_request.base.ref} -- ./package.json > base.json`
+    `git show origin/${github.context.payload.pull_request.base.ref}:./package.json > base.json`
   );
 
   await exec.exec(
-    `git show origin/${github.context.payload.pull_request.head.ref} -- ./package.json > head.json`
+    `git show origin/${github.context.payload.pull_request.head.ref}:./package.json > head.json`
   );
 
   /* Read file in memory and compare package.json */
