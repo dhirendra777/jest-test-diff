@@ -13486,6 +13486,11 @@ const { promises: fs } = __nccwpck_require__(7147);
 const exec = __nccwpck_require__(1313);
 
 const main = async () => {
+  await exec.exec(`touch base.json`);
+  await exec.exec(`touch head.json`);
+  await exec.exec(
+    `git show origin/${github.context.payload.pull_request.base.ref} -- ./package.json >> base.json`
+  );
   /* Dump in file */
   await exec.exec(
     `git show origin/${github.context.payload.pull_request.base.ref} -- ./package.json >> base.json`
