@@ -13300,14 +13300,6 @@ module.exports = require("path");
 
 /***/ }),
 
-/***/ 7282:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("process");
-
-/***/ }),
-
 /***/ 5477:
 /***/ ((module) => {
 
@@ -13483,83 +13475,38 @@ module.exports = JSON.parse('[["0","\\u0000",128],["a1","｡",62],["8140","　�
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
+"use strict";
+
+
 const core = __nccwpck_require__(2438);
 const github = __nccwpck_require__(7960);
 const { promises: fs } = __nccwpck_require__(7147);
 const exec = __nccwpck_require__(1313);
-const { stderr } = __nccwpck_require__(7282);
 
-try {
-  function getOptions() {
-    let headOutput = "";
-    let headError = "";
-
-    const headOptions = {};
-    headOptions.listeners = {
-      stdout: (data) => {
-        headOutput += data.toString();
-      },
-      stderr: (data) => {
-        headError += data.toString();
-      },
-    };
-
-    return [headOutput, headError, headOptions];
-  }
-  // `who-to-greet` input defined in action metadata file
-  //   const nameToGreet = core.getInput('who-to-greet');
-  //   console.log(`Hello ${nameToGreet}!`);
-  //   const time = (new Date()).toTimeString();
-  //   core.setOutput("time", time);
-  // Get the JSON webhook payload for the event that triggered the workflow
-  //   const payload = JSON.stringify(github.context.payload, undefined, 2)
-  //   console.log(`The event payload: ${payload}`);
-
-  //   let headOutput = "";
-  //   let headError = "";
-
-  //   const headOptions = {};
-  //   headOptions.listeners = {
-  //     stdout: (data) => {
-  //       headOutput += data.toString();
-  //     },
-  //     stderr: (data) => {
-  //       headError += data.toString();
-  //     },
-  //   };
-  const [baseOutput, baseError, baseOptions] = getOptions(),
-    [headOutput, headError, headOptions] = getOptions();
-
-  const basePromise = exec.exec(
-    "git",
-    [
-      "show",
-      `origin/${github.context.payload.pull_request.base.ref}:./package.json`,
-    ],
-    baseOptions
+const main = async () => {
+  /* Dump in file */
+  await exec.exec(
+    `git show origin/${github.context.payload.pull_request.base.ref}:./package.json > base.json`
   );
 
-  const headPromise = exec.exec(
-    "git",
-    [
-      "show",
-      `origin/${github.context.payload.pull_request.head.ref}:./package.json`,
-    ],
-    headOptions
+  await exec.exec(
+    `git" show origin/${github.context.payload.pull_request.head.ref}:./package.json > head.json`
   );
 
-  Promise.all([basePromise, headPromise]).then(() => {
-    if (baseError || headError) return 1;
-    console.log("Base content", baseOutput);
-    console.log("Head content", headOutput);
-    // const baseContent = JSON.parse(baseOutput),
-    //   headContent = JSON.parse(headOutput);
-  });
-} catch (error) {
+  /* Read file in memory and compare package.json */
+  let baseContent = await fs.readFile("./base.json", "utf8");
+  let headContent = await fs.readFile("./head.json", "utf8");
+
+  console.log("Base content is ", baseContent);
+  console.log("Head content is ", headContent);
+};
+
+main().catch(() => {
+  /* Remove created file */
   core.setFailed(error.message);
-}
+});
 
 })();
 
