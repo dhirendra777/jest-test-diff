@@ -1,7 +1,7 @@
 name: "Test runner"
 description: "runs affected test cases only for a PR"
 runs:
-  using: composite
+  name: running test cases
   steps:
     - id: package_json_mutation
       run: git diff origin/${{ github.event.pull_request.head.ref }}..origin/${{github.event.pull_request.head.ref}} --exit-code package.json || echo "::set-output name=file_updated::true"
