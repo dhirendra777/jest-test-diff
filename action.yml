@@ -1,13 +1,15 @@
-name: "Hello World"
-description: "Greet someone and record the time"
-inputs:
-  who-to-greet: # id of input
-    description: "Who to greet"
-    required: true
-    default: "World"
-outputs:
-  time: # id of output
-    description: "The time we greeted you"
+name: "Test runner"
+description: "runs affected test cases only for a PR"
 runs:
-  using: "node16"
-  main: "dist/index.js"
+  using: composite
+  steps:
+    - id: package_json_mutation
+      run: git diff origin/${{ github.event.pull_request.head.ref }}..origin/${{github.event.pull_request.head.ref}} --exit-code package.json || echo "::set-output name=file_updated::true"
+
+    - if: ${{ github.event.pull_request.base.ref == 'release' || steps.package_json_mutation.outputs.file_updated  }}
+      name: Run all tests
+      run: echo "Ran all successfully"
+
+    - if: ${{ !steps.package_json_mutation.outputs.file_updated && github.event.pull_request.base.ref != 'release' }}
+      name: Run limited tests
+      run: yarn jest --changedSince=origin/${{ github.event.pull_request.base.ref }}
